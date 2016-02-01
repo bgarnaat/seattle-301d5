@@ -12,6 +12,7 @@ function Article (opts) {
 Article.prototype.toHtml = function() {
   var $newArticle = $('article.template').clone();
 
+
   $newArticle.attr('data-category', this.category);
 
   $newArticle.find('h1').text(this.title);
@@ -20,7 +21,7 @@ Article.prototype.toHtml = function() {
 
   $newArticle.find('address a').attr('href', this.authorUrl);
 
-  $newArticle.find('.article-body').text(this.body);
+  $newArticle.find('.article-body').append(this.body);
 
   $newArticle.find('time[pubdate]').attr('title', this.publishedOn);
 
