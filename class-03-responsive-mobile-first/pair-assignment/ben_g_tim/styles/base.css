@@ -14,6 +14,9 @@ hr {
   margin: 1em;
   width: 80%;
 }
+article {
+  padding: 1%;
+}
 
 /*TEXT STYLES
 =======================================*/
