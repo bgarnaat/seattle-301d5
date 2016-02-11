@@ -95,16 +95,27 @@
   Article.loadAll = function(rows) {
     Article.all = rows.map(function(ele) {
       return new Article(ele);
+
     });
   };
+
 
   // TODO: Refactor this to check if the database holds any records or not. If the DB is empty,
   // we need to retrieve the JSON and process it.
   // If the DB has data already, we'll load up the data (sorted!), and then hand off control to the View.
   Article.fetchAll = function(next) {
-    webDB.execute('', function(rows) {
+    webDB.execute(
+      [
+          {
+            'sql': 'SELECT * FROM articles ORDER BY publishedOn;'
+          }
+      ],
+      function(rows) {
       if (rows.length) {
         // Now instanitate those rows with the .loadAll function, and pass control to the view.
+        Article.loadAll(rows);
+        next();
+        console.log('SQL data loaded');
 
       } else {
         $.getJSON('/data/hackerIpsum.json', function(rawData) {
@@ -116,7 +127,15 @@
             article.insertRecord();
           });
           // Now get ALL the records out the DB, with their database IDs:
-          webDB.execute('', function(rows) {
+          webDB.execute(
+            [
+              {
+                'sql': 'SELECT * FROM articles ORDER BY publishedOn;'
+              }
+            ],
+            function(rows) {
+              Article.loadAll(rows);
+              next();
             // Now instanitate those rows with the .loadAll function, and pass control to the view.
 
           });
